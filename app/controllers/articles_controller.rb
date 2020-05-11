@@ -1,5 +1,5 @@
 class ArticlesController < ApplicationController
-  before_action :set_article, only: [:show, :edit, :update, :destory]
+  before_action :set_article, only: [:show, :edit, :update, :destroy]
 
   def show
     # byebug => debugger
