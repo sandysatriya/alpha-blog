@@ -1,11 +1,11 @@
 class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
-    @articles = @user.articles
+    @articles = @user.articles.paginate(page: params[:page], per_page: 4)
   end
 
   def index
-    @user = User.all
+    @users = User.paginate(page: params[:page], per_page: 3)
   end
 
   def new
@@ -30,7 +30,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       flash[:notice] = "Welcome to the alpha blog #{@user.username}, you have successfully signup"
-      redirect_to articles_path
+      redirect_to @user
     else
       render "new"
     end
