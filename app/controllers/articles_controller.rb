@@ -26,7 +26,8 @@ class ArticlesController < ApplicationController
   def create
     # render json: params[:article]
     @article = Article.new(article_params)
-    @article.user = User.first
+    # @article.user = User.find(session[:user_id]) ini juga bisa di pake
+    @article.user = current_user
     if @article.save
       flash[:notice] = "Article was created succesfully."
       redirect_to @article
@@ -39,10 +40,15 @@ class ArticlesController < ApplicationController
 
   def update
     # @article = Article.find(params[:id])
-    if @article.update(article_params)
-      flash[:notice] = "Article was updated succefully."
-      redirect_to @article
+    if @article.user == current_user
+      if @article.update(article_params)
+        flash[:notice] = "Article was updated succefully."
+        redirect_to @article
+      else
+        render "edit"
+      end
     else
+      flash[:notice] = "You don't have permission to edit this article"
       render "edit"
     end
   end
